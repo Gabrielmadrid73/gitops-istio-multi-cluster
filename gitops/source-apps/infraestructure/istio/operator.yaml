@@ -1,0 +1,19 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: istio-operator
+  namespace: flux-system
+spec:
+  interval: 10m
+  timeout: 5m
+  chart: 
+    spec:
+      chart: manifests/charts/istio-operator
+      sourceRef:
+        kind: GitRepository
+        name: istio-repo
+      interval: 5m
+  releaseName: istio-operator
+  targetNamespace: istio-operator
+  install:
+    createNamespace: true
