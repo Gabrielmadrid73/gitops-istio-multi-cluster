@@ -6,15 +6,14 @@ metadata:
 spec:
   interval: 10m
   timeout: 5m
-  chart:
+  chart: 
     spec:
-      chart: istio-operator
-      version: '1.21.*'
+      chart: manifests/charts/istio-operator
       sourceRef:
-        kind: HelmRepository
-        name: istio
+        kind: GitRepository
+        name: istio-repo
       interval: 5m
   releaseName: istio-operator
-  targetNamespace: istio-system
+  targetNamespace: istio-operator
   install:
     createNamespace: true
