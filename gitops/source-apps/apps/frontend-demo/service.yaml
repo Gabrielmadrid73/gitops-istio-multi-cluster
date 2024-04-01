@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecsdemo-frontend
+  namespace: apps
+spec:
+  selector:
+    app: ecsdemo-frontend
+  ports:
+   -  protocol: TCP
+      port: 80
+      targetPort: 3000
