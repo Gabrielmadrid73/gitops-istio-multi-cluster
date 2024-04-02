@@ -5,7 +5,7 @@ metadata:
   namespace: apps
 spec:
   hosts:
-  - ecsdemo-frontend
+  - ecsdemo-frontend.apps.svc.cluster.local
   http:
   - route:
     - destination:
