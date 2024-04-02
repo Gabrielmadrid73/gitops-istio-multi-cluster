@@ -1,8 +1,8 @@
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
-  name: mesh-default
-  namespace: istio-system
+  name: istio-config
+  namespace: istio-operator
 spec:
   values:
     global:
