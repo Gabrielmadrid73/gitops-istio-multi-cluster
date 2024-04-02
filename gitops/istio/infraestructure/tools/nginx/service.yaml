@@ -7,9 +7,10 @@ metadata:
   namespace: tools
 spec:
   ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 80
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
   selector:
     app: nginx
   type: ClusterIP
