@@ -22,11 +22,12 @@ spec:
         enableAnalysis: true
       meshID: mesh-default
       multiCluster:
+        enabled: true
         clusterName: istio
       network: network-default
     gateways:
       istio-ingressgateway:
-        type: ClusterIP
+        type: NodePort
     pilot:
       env:
         PILOT_ENABLE_STATUS: true
