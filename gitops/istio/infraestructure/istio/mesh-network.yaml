@@ -6,6 +6,8 @@ metadata:
 spec:
   values:
     global:
+      istiod:
+        enableAnalysis: true
       meshID: mesh-default
       multiCluster:
         clusterName: istio
@@ -13,3 +15,7 @@ spec:
     gateways:
       istio-ingressgateway:
         type: NodePort
+    pilot:
+      env:
+        PILOT_ENABLE_STATUS: true
+        PILOT_ENABLE_CONFIG_DISTRIBUTION_TRACKING: true
