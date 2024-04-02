@@ -10,3 +10,6 @@ spec:
       multiCluster:
         clusterName: istio
       network: network-default
+    gateways:
+      istio-ingressgateway:
+        type: NodePort
