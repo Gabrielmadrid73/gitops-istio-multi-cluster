@@ -2,6 +2,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: ecsdemo-nodejs
+  namespace: apps
 spec:
   hosts:
   - ecsdemo-nodejs
