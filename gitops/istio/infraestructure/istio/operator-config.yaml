@@ -1,8 +1,8 @@
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
-  name: istio-config
-  namespace: istio-operator
+  name: operator-config
+  namespace: istio-system
 spec:
   values:
     global:
