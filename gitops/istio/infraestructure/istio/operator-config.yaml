@@ -19,5 +19,3 @@ spec:
       env:
         PILOT_ENABLE_STATUS: true
         PILOT_ENABLE_CONFIG_DISTRIBUTION_TRACKING: true
-    istiocoredns:
-      enabled: true
