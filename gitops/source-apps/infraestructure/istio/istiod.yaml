@@ -23,7 +23,7 @@ spec:
       meshID: mesh-default
       multiCluster:
         enabled: true
-        clusterName: source-apps
+        clusterName: source-apps-control-plane
       network: network-default
     gateways:
       istio-ingressgateway:
