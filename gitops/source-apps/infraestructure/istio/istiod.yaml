@@ -60,18 +60,18 @@ spec:
     service:
       type: NodePort
       ports:
-          - name: status-port
-            port: 15021
-            targetPort: 15021
-          - name: mtls
-            port: 15443
-            targetPort: 15443
-          - name: tcp-istiod
-            port: 15012
-            targetPort: 15012
-          - name: tcp-webhook
-            port: 15017
-            targetPort: 15017  
+        - name: status-port
+          port: 15021
+          targetPort: 15021
+        - name: mtls
+          port: 15443
+          targetPort: 15443
+        - name: tcp-istiod
+          port: 15012
+          targetPort: 15012
+        - name: tcp-webhook
+          port: 15017
+          targetPort: 15017
     env:
       ISTIO_META_ROUTE_MODE: "sni-dnat"
       ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
@@ -89,8 +89,8 @@ spec:
     - port:
         number: 15443
         name: mtls
-        protocol: TLS
-      tls:
-        mode: AUTO_PASSTHROUGH
+        protocol: TCP
+      # tls:
+      #   mode: AUTO_PASSTHROUGH
       hosts:
         - "*.local"
