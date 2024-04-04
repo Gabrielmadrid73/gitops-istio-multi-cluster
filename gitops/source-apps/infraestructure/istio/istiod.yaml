@@ -28,9 +28,13 @@ spec:
     gateways:
       istio-ingressgateway:
         type: NodePort
-    pilot:
-      env:
-        PILOT_ENABLE_STATUS: true
-        PILOT_ENABLE_CONFIG_DISTRIBUTION_TRACKING: true
+    meshConfig:
+      enablePrometheusMerge: false
+      defaultConfig:
+        proxyMetadata:
+          ISTIO_META_DNS_CAPTURE: "true"
+          ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+          ISTIO_META_ROUTE_MODE: "sni-dnat"
+          ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
     sidecarInjectorWebhook:
-      enabled: true
+      rewriteAppHTTPProbe: false

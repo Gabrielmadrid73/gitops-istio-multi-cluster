@@ -3,4 +3,11 @@ kind: Namespace
 metadata:
   name: tools
   labels:
-    istio-injection: enabled 
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apps
+  labels:
+    istio-injection: enabled

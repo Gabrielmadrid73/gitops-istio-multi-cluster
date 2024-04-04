@@ -27,3 +27,29 @@ spec:
         ports:
         - containerPort: 3000
           protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecsdemo-nodejs
+  namespace: apps
+spec:
+  selector:
+    app: ecsdemo-nodejs
+  ports:
+   -  protocol: TCP
+      port: 80
+      targetPort: 3000
+---
+# apiVersion: networking.istio.io/v1beta1
+# kind: VirtualService
+# metadata:
+#   name: ecsdemo-nodejs
+#   namespace: apps
+# spec:
+#   hosts:
+#   - ecsdemo-nodejs
+#   http:
+#   - route:
+#     - destination:
+#         host: ecsdemo-nodejs

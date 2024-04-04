@@ -27,3 +27,31 @@ spec:
         ports:
         - containerPort: 3000
           protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecsdemo-crystal
+  namespace: apps
+spec:
+  selector:
+    app: ecsdemo-crystal
+  ports:
+   -  protocol: TCP
+      port: 80
+      targetPort: 3000
+
+---
+# apiVersion: networking.istio.io/v1beta1
+# kind: VirtualService
+# metadata:
+#   name: ecsdemo-crystal
+#   namespace: apps
+# spec:
+#   hosts:
+#   - ecsdemo-crystal
+#   http:
+#   - route:
+#     - destination:
+#         host: ecsdemo-crystal
