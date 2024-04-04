@@ -87,7 +87,7 @@ spec:
     app: istio-ingressgateway
   servers:
     - port:
-        number: 30775
+        number: 15443
         name: mtls
         protocol: TLS
       tls:
