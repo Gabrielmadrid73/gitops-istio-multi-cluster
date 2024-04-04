@@ -27,6 +27,7 @@ spec:
       network: network-default
     gateways:
       istio-ingressgateway:
+        enabled: true
         type: NodePort
     meshConfig:
       enablePrometheusMerge: false
