@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  timeout: 5m
+  timeout: 1m
   chart:
     spec:
       chart: istiod
@@ -13,7 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: istio
-      interval: 5m
+      interval: 1m
   releaseName: istiod
   targetNamespace: istio-system
   values:
@@ -25,21 +25,53 @@ spec:
         enabled: true
         clusterName: istio-control-plane
       network: network-default
-    gateways:
-      istio-ingressgateway:
-        enabled: true
-        type: NodePort
     meshConfig:
       enablePrometheusMerge: false
       defaultConfig:
         proxyMetadata:
           ISTIO_META_DNS_CAPTURE: "true"
           ISTIO_META_DNS_AUTO_ALLOCATE: "true"
-          ISTIO_META_ROUTE_MODE: "sni-dnat"
-          ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
     sidecarInjectorWebhook:
       rewriteAppHTTPProbe: false
     pilot:
       env:
         PILOT_ENABLE_STATUS: true
         PILOT_ENABLE_CONFIG_DISTRIBUTION_TRACKING: true
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: istio-ingressgateway
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 1m
+  chart:
+    spec:
+      chart: gateway
+      version: '1.21.*'
+      sourceRef:
+        kind: HelmRepository
+        name: istio
+      interval: 1m
+  releaseName: istio-ingressgateway
+  targetNamespace: istio-system
+  values:
+    service:
+      type: NodePort
+      ports:
+          - name: status-port
+            port: 15021
+            targetPort: 15021
+          - name: mtls
+            port: 15443
+            targetPort: 15443
+          - name: tcp-istiod
+            port: 15012
+            targetPort: 15012
+          - name: tcp-webhook
+            port: 15017
+            targetPort: 15017  
+    env:
+      ISTIO_META_ROUTE_MODE: "sni-dnat"
+      ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
