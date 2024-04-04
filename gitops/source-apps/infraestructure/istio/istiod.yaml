@@ -87,8 +87,8 @@ spec:
     app: istio-ingressgateway
   servers:
     - port:
-        number: 15443
-        name: mtls
+        number: 15012
+        name: tcp-istiod
         protocol: TCP
       # tls:
       #   mode: AUTO_PASSTHROUGH
