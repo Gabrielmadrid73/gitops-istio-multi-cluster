@@ -75,3 +75,22 @@ spec:
     env:
       ISTIO_META_ROUTE_MODE: "sni-dnat"
       ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingressgateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: istio-ingressgateway
+  servers:
+    - port:
+        number: 15443
+        name: tls
+        protocol: TLS
+      tls:
+        mode: AUTO_PASSTHROUGH
+      hosts:
+        - "*.local"
