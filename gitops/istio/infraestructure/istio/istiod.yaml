@@ -88,7 +88,7 @@ spec:
   servers:
     - port:
         number: 30775
-        name: tls
+        name: mtls
         protocol: TLS
       tls:
         mode: AUTO_PASSTHROUGH
