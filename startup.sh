@@ -29,7 +29,7 @@ done
 export GITHUB_TOKEN=$githubtoken
 
 echo "Checking binaries requirements."
-requirements=("kind" "helm" "curl" "flux")
+requirements=("kind" "helm" "curl" "flux" "istioctl")
 for binary in ${requirements[@]}; do 
     if ! command -v $binary &> /dev/null; then
         echo "ERROR - $binary not installed."
@@ -45,7 +45,7 @@ done
 echo -e "\nCreating clusters."
 kind create cluster --config=clusters/istio.yaml
 kind create cluster --config=clusters/source-apps.yaml
-kind create cluster --config=clusters/target-apps.yaml
+# kind create cluster --config=clusters/target-apps.yaml
 
 echo -e "\nCreated clusters:"
 kind get clusters
@@ -55,5 +55,10 @@ for cluster in ${clusters[@]};do
     echo -e "\nSetting context to $cluster cluster."
     kubectl config use-context kind-$cluster
     flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster --personal
+    istioctl create-remote-secret --context=kind-$cluster --name=$cluster > secret-$cluster.yaml
 done
 
+sleep 120
+
+kubectl apply -f secret-istio.yaml --context=kind-source-apps
+kubectl apply -f secret-source-apps.yaml --context=kind-istio
