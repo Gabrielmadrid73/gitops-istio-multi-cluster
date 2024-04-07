@@ -4,6 +4,8 @@ metadata:
   name: istiod
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: istio-base
   interval: 1m
   timeout: 1m
   chart:
@@ -44,6 +46,8 @@ metadata:
   name: istio-ingressgateway
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: istiod
   interval: 1m
   timeout: 1m
   chart:

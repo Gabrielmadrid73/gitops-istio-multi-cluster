@@ -42,10 +42,15 @@ for binary in ${requirements[@]}; do
     fi
 done
 
-echo -e "\nCreating clusters."
-kind create cluster --config=clusters/istio.yaml
-kind create cluster --config=clusters/source-apps.yaml
-# kind create cluster --config=clusters/target-apps.yaml
+clusters_file=(istio source-apps)
+ip=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d\  -f2)
+
+for cluster in ${clusters_file[@]}; do 
+    sed -i '' -e "s/0.0.0.0/$ip/" clusters/$cluster.yaml
+    echo -e "\nCreating cluster $cluster."
+    kind create cluster --config=clusters/$cluster.yaml
+done
+git restore ./clusters
 
 echo -e "\nCreated clusters:"
 kind get clusters
