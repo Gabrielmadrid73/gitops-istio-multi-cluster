@@ -1,11 +1,37 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: istiod
+  name: istio-base
   namespace: flux-system
 spec:
   interval: 1m
-  timeout: 1m
+  timeout: 5m
+  chart:
+    spec:
+      chart: base
+      version: '1.21.*'
+      sourceRef:
+        kind: HelmRepository
+        name: istio
+      interval: 1m
+  releaseName: istio-base
+  targetNamespace: istio-system
+  install:
+    createNamespace: true
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: istiod
+  namespace: flux-system
+spec:
+  releaseName: istiod
+  targetNamespace: istio-system
+  dependsOn:
+    - name: istio-base
+  interval: 1m
+  timeout: 5m
   chart:
     spec:
       chart: istiod
@@ -14,10 +40,6 @@ spec:
         kind: HelmRepository
         name: istio
       interval: 1m
-  releaseName: istiod
-  targetNamespace: istio-system
-  install:
-    createNamespace: true
   values:
     global:
       istiod:
@@ -46,8 +68,10 @@ metadata:
   name: istio-ingressgateway
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: istiod
   interval: 1m
-  timeout: 1m
+  timeout: 5m
   chart:
     spec:
       chart: gateway
@@ -58,30 +82,30 @@ spec:
       interval: 1m
   releaseName: istio-ingressgateway
   targetNamespace: istio-system
-  install:
-    createNamespace: true
   values:
     service:
       type: NodePort
-      ports:
-        - name: status-port
-          port: 15021
-          targetPort: 15021
-        - name: mtls
-          port: 15443
-          targetPort: 15443
-        - name: tcp-istiod
-          port: 15012
-          targetPort: 15012
-        - name: tcp-webhook
-          port: 15017
-          targetPort: 15017
-    env:
-      ISTIO_META_ROUTE_MODE: "sni-dnat"
-      ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
     defaults:
       autoscaling:
         enabled: false
+    env:
+      ISTIO_META_ROUTE_MODE: "sni-dnat"
+      ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
+    #   ports:
+    #     - name: status-port
+    #       port: 15021
+    #       targetPort: 15021
+    #     - name: mtls
+    #       port: 15443
+    #       targetPort: 15443
+    #     - name: tcp-istiod
+    #       port: 15012
+    #       targetPort: 15012
+    #     - name: tcp-webhook
+    #       port: 15017
+    #       targetPort: 15017
+    
+    
 
 ---
 # apiVersion: networking.istio.io/v1alpha3
