@@ -4,8 +4,6 @@ metadata:
   name: istiod
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: istio-base
   interval: 1m
   timeout: 1m
   chart:
@@ -46,8 +44,6 @@ metadata:
   name: istio-ingressgateway
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: istiod
   interval: 1m
   timeout: 1m
   chart:
@@ -84,20 +80,20 @@ spec:
         enabled: false
 
 ---
-apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
-metadata:
-  name: istio-ingressgateway
-  namespace: istio-system
-spec:
-  selector:
-    app: istio-ingressgateway
-  servers:
-    - port:
-        number: 15012
-        name: tcp-istiod
-        protocol: TCP
-      # tls:
-      #   mode: AUTO_PASSTHROUGH
-      hosts:
-        - "*.local"
+# apiVersion: networking.istio.io/v1alpha3
+# kind: Gateway
+# metadata:
+#   name: istio-ingressgateway
+#   namespace: istio-system
+# spec:
+#   selector:
+#     app: istio-ingressgateway
+#   servers:
+#     - port:
+#         number: 15012
+#         name: tcp-istiod
+#         protocol: TCP
+#       tls:
+#         mode: AUTO_PASSTHROUGH
+#       hosts:
+#         - "*.local"
