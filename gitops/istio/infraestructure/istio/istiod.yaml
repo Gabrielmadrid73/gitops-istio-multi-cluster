@@ -79,6 +79,9 @@ spec:
     env:
       ISTIO_META_ROUTE_MODE: "sni-dnat"
       ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
+    defaults:
+      autoscaling:
+        enabled: false
 
 ---
 apiVersion: networking.istio.io/v1alpha3
