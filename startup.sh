@@ -63,7 +63,7 @@ for cluster in ${clusters[@]};do
     istioctl create-remote-secret --context=kind-$cluster --name=$cluster > secret-$cluster.yaml
 done
 
-sleep 120
-
 kubectl apply -f secret-istio.yaml --context=kind-source-apps
 kubectl apply -f secret-source-apps.yaml --context=kind-istio
+
+rm -rf secret-istio.yaml secret-source-apps.yaml
