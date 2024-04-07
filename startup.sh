@@ -60,6 +60,8 @@ for cluster in ${clusters[@]};do
     echo -e "\nSetting context to $cluster cluster."
     kubectl config use-context kind-$cluster
     flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster --personal
+    # Wait for Istio namespace and installation / SA conflict istio-reader-service-account
+    sleep 60
     istioctl create-remote-secret --context=kind-$cluster --name=$cluster > secret-$cluster.yaml
 done
 

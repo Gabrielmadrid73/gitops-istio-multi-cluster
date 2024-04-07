@@ -16,6 +16,8 @@ spec:
       interval: 1m
   releaseName: istiod
   targetNamespace: istio-system
+  install:
+    createNamespace: true
   values:
     global:
       istiod:
@@ -56,6 +58,8 @@ spec:
       interval: 1m
   releaseName: istio-ingressgateway
   targetNamespace: istio-system
+  install:
+    createNamespace: true
   values:
     service:
       type: NodePort

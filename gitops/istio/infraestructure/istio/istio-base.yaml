@@ -16,3 +16,5 @@ spec:
       interval: 1m
   releaseName: istio-base
   targetNamespace: istio-system
+  install:
+    createNamespace: true
