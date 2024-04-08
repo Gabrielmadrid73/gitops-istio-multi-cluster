@@ -19,6 +19,7 @@ spec:
     metadata:
       labels:
         app: ecsdemo-crystal
+        service: ecsdemo-crystal
     spec:
       containers:
       - image: brentley/ecsdemo-crystal:latest
@@ -34,6 +35,8 @@ kind: Service
 metadata:
   name: ecsdemo-crystal
   namespace: apps
+  labels:
+    service: ecsdemo-crystal
 spec:
   selector:
     app: ecsdemo-crystal

@@ -19,6 +19,7 @@ spec:
     metadata:
       labels:
         app: ecsdemo-frontend
+        service: ecsdemo-frontend
     spec:
       containers:
       - image: brentley/ecsdemo-frontend:latest
@@ -38,6 +39,8 @@ kind: Service
 metadata:
   name: ecsdemo-frontend
   namespace: apps
+  labels:
+    service: ecsdemo-frontend
 spec:
   selector:
     app: ecsdemo-frontend
@@ -45,16 +48,16 @@ spec:
    -  protocol: TCP
       port: 80
       targetPort: 3000
----
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  name: ecsdemo-frontend
-  namespace: apps
-spec:
-  hosts:
-  - ecsdemo-frontend
-  http:
-  - route:
-    - destination:
-        host: ecsdemo-frontend
+# ---
+# apiVersion: networking.istio.io/v1beta1
+# kind: VirtualService
+# metadata:
+#   name: ecsdemo-frontend
+#   namespace: apps
+# spec:
+#   hosts:
+#   - ecsdemo-frontend
+#   http:
+#   - route:
+#     - destination:
+#         host: ecsdemo-frontend

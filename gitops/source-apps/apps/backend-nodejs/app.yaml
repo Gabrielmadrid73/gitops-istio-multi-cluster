@@ -19,6 +19,7 @@ spec:
     metadata:
       labels:
         app: ecsdemo-nodejs
+        service: ecsdemo-nodejs
     spec:
       containers:
       - image: brentley/ecsdemo-nodejs:latest
@@ -33,6 +34,8 @@ kind: Service
 metadata:
   name: ecsdemo-nodejs
   namespace: apps
+  labels:
+    service: ecsdemo-nodejs
 spec:
   selector:
     app: ecsdemo-nodejs
