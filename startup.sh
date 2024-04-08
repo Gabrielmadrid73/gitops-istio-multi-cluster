@@ -61,7 +61,7 @@ for cluster in ${clusters[@]};do
     kubectl config use-context kind-$cluster
     flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster/flux-resources --personal
     # Wait for Istio namespace and installation / SA conflict istio-reader-service-account
-    sleep 60
+    sleep 120
     istioctl create-remote-secret --context=kind-$cluster --name=$cluster > secret-$cluster.yaml
 done
 
@@ -69,3 +69,8 @@ kubectl apply -f secret-istio.yaml --context=kind-source-apps
 kubectl apply -f secret-source-apps.yaml --context=kind-istio
 
 rm -rf secret-istio.yaml secret-source-apps.yaml
+
+kubectl config use-context kind-source-apps
+kubectl rollout restart deploy ecsdemo-crystal ecsdemo-frontend ecsdemo-nodejs -n apps
+kubectl config use-context kind-istio
+kubectl rollout restart deploy nginx -n tools

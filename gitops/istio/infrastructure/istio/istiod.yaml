@@ -41,6 +41,9 @@ spec:
         name: istio
       interval: 1m
   values:
+    defaults:
+      pilot:
+        autoscaleEnabled: false
     global:
       istiod:
         enableAnalysis: true
