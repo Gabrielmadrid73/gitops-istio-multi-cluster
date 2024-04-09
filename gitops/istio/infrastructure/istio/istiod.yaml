@@ -64,67 +64,46 @@ spec:
     #   env:
     #     PILOT_ENABLE_STATUS: true
     #     PILOT_ENABLE_CONFIG_DISTRIBUTION_TRACKING: true
----
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
-kind: HelmRelease
-metadata:
-  name: istio-ingressgateway
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: istiod
-  interval: 1m
-  timeout: 5m
-  chart:
-    spec:
-      chart: gateway
-      version: '1.21.*'
-      sourceRef:
-        kind: HelmRepository
-        name: istio
-      interval: 1m
-  releaseName: istio-ingressgateway
-  targetNamespace: istio-system
-  values:
-    service:
-      type: NodePort
-    defaults:
-      autoscaling:
-        enabled: false
-    env:
-      ISTIO_META_ROUTE_MODE: "sni-dnat"
-      ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
-    #   ports:
-    #     - name: status-port
-    #       port: 15021
-    #       targetPort: 15021
-    #     - name: mtls
-    #       port: 15443
-    #       targetPort: 15443
-    #     - name: tcp-istiod
-    #       port: 15012
-    #       targetPort: 15012
-    #     - name: tcp-webhook
-    #       port: 15017
-    #       targetPort: 15017
-    
-    
-
----
-# apiVersion: networking.istio.io/v1alpha3
-# kind: Gateway
+# ---
+# apiVersion: helm.toolkit.fluxcd.io/v2beta2
+# kind: HelmRelease
 # metadata:
 #   name: istio-ingressgateway
-#   namespace: istio-system
+#   namespace: flux-system
 # spec:
-#   selector:
-#     app: istio-ingressgateway
-#   servers:
-#     - port:
-#         number: 15012
-#         name: tcp-istiod
-#         protocol: TCP
-#       tls:
-#         mode: AUTO_PASSTHROUGH
-#       hosts:
-#         - "*.local"
+#   dependsOn:
+#     - name: istiod
+#   interval: 1m
+#   timeout: 5m
+#   chart:
+#     spec:
+#       chart: gateway
+#       version: '1.21.*'
+#       sourceRef:
+#         kind: HelmRepository
+#         name: istio
+#       interval: 1m
+#   releaseName: istio-ingressgateway
+#   targetNamespace: istio-system
+#   values:
+#     service:
+#       type: NodePort
+#     defaults:
+#       autoscaling:
+#         enabled: false
+#     env:
+#       ISTIO_META_ROUTE_MODE: "sni-dnat"
+#       ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
+#     #   ports:
+#     #     - name: status-port
+#     #       port: 15021
+#     #       targetPort: 15021
+#     #     - name: mtls
+#     #       port: 15443
+#     #       targetPort: 15443
+#     #     - name: tcp-istiod
+#     #       port: 15012
+#     #       targetPort: 15012
+#     #     - name: tcp-webhook
+#     #       port: 15017
+#     #       targetPort: 15017
