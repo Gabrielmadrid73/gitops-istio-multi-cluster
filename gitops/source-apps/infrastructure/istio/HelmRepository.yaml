@@ -15,7 +15,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 3m0s
-  url: https://kiali.org/helm-charts
+  url: https://openchart.goodrain.com/goodrain/rainbond
 
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
