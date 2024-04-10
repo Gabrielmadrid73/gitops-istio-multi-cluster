@@ -77,8 +77,6 @@ spec:
   releaseName: istio-ingressgateway
   targetNamespace: istio-system
   values:
-    labels:
-      topology.istio.io/network: network-default
     service:
       type: NodePort
     defaults:
