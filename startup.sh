@@ -63,10 +63,11 @@ for cluster in ${clusters[@]};do
     echo -e "\nSetting context to $cluster cluster."
     kubectl config use-context kind-$cluster
     kubectl create namespace istio-system
+    kubectl label ns istio-injection=enabled 
     kubectl create secret generic cacerts -n istio-system --from-file=istio/ca-cert.pem --from-file=istio/ca-key.pem --from-file=istio/root-cert.pem --from-file=istio/cert-chain.pem
     flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster/flux-resources --personal
     # Wait for Istio namespace and installation / SA conflict istio-reader-service-account
-    sleep 120
+    sleep 160
     istioctl create-remote-secret --context=kind-$cluster --name=$cluster > secret-$cluster.yaml
 done
 

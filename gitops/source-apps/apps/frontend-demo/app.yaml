@@ -4,7 +4,7 @@ metadata:
   name: ecsdemo-frontend
   labels:
     app: ecsdemo-frontend
-  namespace: apps
+  namespace: istio-system
 spec:
   replicas: 1
   selector:
@@ -30,15 +30,15 @@ spec:
           protocol: TCP
         env:
         - name: CRYSTAL_URL
-          value: "http://ecsdemo-crystal.apps.svc.cluster.local/crystal"
+          value: "http://ecsdemo-crystal.istio-system.svc.cluster.local/crystal"
         - name: NODEJS_URL
-          value: "http://ecsdemo-nodejs.apps.svc.cluster.local/"
+          value: "http://ecsdemo-nodejs.istio-system.svc.cluster.local/"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ecsdemo-frontend
-  namespace: apps
+  namespace: istio-system
   labels:
     service: ecsdemo-frontend
 spec:
