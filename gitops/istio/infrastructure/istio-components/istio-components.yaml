@@ -5,7 +5,7 @@ metadata:
   namespace: istio-system
 spec:
   selector:
-    istio: eastwestgateway
+    istio: istio-ingressgateway
   servers:
     - port:
         name: tls-istiod
