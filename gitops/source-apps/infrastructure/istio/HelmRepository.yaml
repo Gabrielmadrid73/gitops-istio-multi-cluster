@@ -6,3 +6,13 @@ metadata:
 spec:
   interval: 3m0s
   url: https://istio-release.storage.googleapis.com/charts
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: kiali
+  namespace: flux-system
+spec:
+  interval: 3m0s
+  url: https://kiali.org/helm-charts
