@@ -45,25 +45,16 @@ spec:
       pilot:
         autoscaleEnabled: false
     global:
-      # istiod:
-      #   enableAnalysis: true
       meshID: mesh-default
       multiCluster:
         enabled: true
-        clusterName: source-apps-control-plane
+        clusterName: source-apps
       network: network-default
     meshConfig:
-      # enablePrometheusMerge: false
       defaultConfig:
         proxyMetadata:
           ISTIO_META_DNS_CAPTURE: "true"
           ISTIO_META_DNS_AUTO_ALLOCATE: "true"
-    # sidecarInjectorWebhook:
-    #   rewriteAppHTTPProbe: false
-    # pilot:
-    #   env:
-    #     PILOT_ENABLE_STATUS: true
-    #     PILOT_ENABLE_CONFIG_DISTRIBUTION_TRACKING: true
 # ---
 # apiVersion: helm.toolkit.fluxcd.io/v2beta2
 # kind: HelmRelease
@@ -94,16 +85,16 @@ spec:
 #     env:
 #       ISTIO_META_ROUTE_MODE: "sni-dnat"
 #       ISTIO_META_REQUESTED_NETWORK_VIEW: "network-default"
-    #   ports:
-    #     - name: status-port
-    #       port: 15021
-    #       targetPort: 15021
-    #     - name: mtls
-    #       port: 15443
-    #       targetPort: 15443
-    #     - name: tcp-istiod
-    #       port: 15012
-    #       targetPort: 15012
-    #     - name: tcp-webhook
-    #       port: 15017
-    #       targetPort: 15017
+#       ports:
+#         - name: status-port
+#           port: 15021
+#           targetPort: 15021
+#         - name: mtls
+#           port: 15443
+#           targetPort: 15443
+#         - name: tcp-istiod
+#           port: 15012
+#           targetPort: 15012
+#         - name: tcp-webhook
+#           port: 15017
+#           targetPort: 15017
