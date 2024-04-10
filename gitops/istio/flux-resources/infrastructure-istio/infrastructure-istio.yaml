@@ -1,0 +1,12 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infrastructure-istio
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  path: ./gitops/istio/infrastructure/istio
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
