@@ -33,11 +33,6 @@ requirements=("kind" "helm" "curl" "flux" "istioctl")
 for binary in ${requirements[@]}; do 
     if ! command -v $binary &> /dev/null; then
         echo "ERROR - $binary not installed."
-        if [ $binary = "flux" ]; then
-            echo -e "\nInstalling Flux"
-            curl -s https://fluxcd.io/install.sh | bash
-            continue
-        fi
         exit 1
     fi
 done
