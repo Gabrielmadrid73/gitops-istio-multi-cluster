@@ -38,40 +38,24 @@ for binary in ${requirements[@]}; do
 done
 
 clusters_file=(istio source-apps)
-ip=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d\  -f2)
-
-for cluster in ${clusters_file[@]}; do 
-    sed -i '' -e "s/0.0.0.0/$ip/" clusters/$cluster.yaml
-    echo -e "\nCreating cluster $cluster."
-    kind create cluster --config=clusters/$cluster.yaml
-done
-git restore ./clusters
-
-echo -e "\nCreated clusters:"
-kind get clusters
-clusters=$(kind get clusters)
 
 make -f Makefile.selfsigned.mk root-ca
 make -f Makefile.selfsigned.mk istio-cacerts
 
-for cluster in ${clusters[@]};do
-    echo -e "\nSetting context to $cluster cluster."
-    kubectl config use-context kind-$cluster
-    kubectl create namespace istio-system
-    kubectl label namespace istio-system istio-injection=enabled
-    kubectl create secret generic cacerts -n istio-system --from-file=istio/ca-cert.pem --from-file=istio/ca-key.pem --from-file=istio/root-cert.pem --from-file=istio/cert-chain.pem
-    flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster/flux-resources --personal
+for cluster in ${clusters_file[@]};do
+    kubectl create namespace istio-system --kubeconfig=~/.kube/$cluster
+    kubectl label namespace istio-system istio-injection=enabled --kubeconfig=~/.kube/$cluster
+    kubectl create secret generic cacerts -n istio-system --from-file=istio/ca-cert.pem --from-file=istio/ca-key.pem --from-file=istio/root-cert.pem --from-file=istio/cert-chain.pem --kubeconfig=~/.kube/$cluster
+    flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster/flux-resources --personal --kubeconfig=~/.kube/$cluster
     # Wait for Istio namespace and installation / SA conflict istio-reader-service-account
     sleep 160
-    istioctl create-remote-secret --context=kind-$cluster --name=$cluster > secret-$cluster.yaml
+    istioctl create-remote-secret --name=$cluster --kubeconfig=~/.kube/$cluster > secret-$cluster.yaml
 done
 
-kubectl apply -f secret-istio.yaml --context=kind-source-apps
-kubectl apply -f secret-source-apps.yaml --context=kind-istio
+kubectl apply -f secret-istio.yaml --kubeconfig=~/.kube/source-apps
+kubectl apply -f secret-source-apps.yaml --kubeconfig=~/.kube/istio
 
 rm -rf secret-istio.yaml secret-source-apps.yaml
 
-kubectl config use-context kind-source-apps
-kubectl rollout restart deploy ecsdemo-crystal ecsdemo-frontend ecsdemo-nodejs -n apps
-kubectl config use-context kind-istio
-kubectl rollout restart deploy nginx -n tools
+kubectl rollout restart deploy ecsdemo-crystal ecsdemo-frontend ecsdemo-nodejs -n istio-system --kubeconfig=~/.kube/source-apps
+kubectl rollout restart deploy nginx -n istio-system --kubeconfig=~/.kube/istio
