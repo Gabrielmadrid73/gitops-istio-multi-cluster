@@ -65,7 +65,7 @@ spec:
   dependsOn:
     - name: istiod
   interval: 1m
-  timeout: 5m
+  timeout: 10m
   chart:
     spec:
       chart: gateway
@@ -77,6 +77,7 @@ spec:
   releaseName: istio-ingressgateway
   targetNamespace: istio-system
   values:
+    profile: demo
     defaults:
       autoscaling:
         enabled: false
@@ -92,7 +93,7 @@ spec:
   dependsOn:
     - name: istiod
   interval: 1m
-  timeout: 5m
+  timeout: 10m
   chart:
     spec:
       chart: kiali
@@ -117,8 +118,8 @@ metadata:
 spec:
   dependsOn:
     - name: istiod
-  interval: 1m
-  timeout: 5m
+  interval: 11m
+  timeout: 10m
   chart:
     spec:
       chart: prometheus
@@ -126,6 +127,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus
-      interval: 1m
+      interval: 10m
   releaseName: prometheus
   targetNamespace: istio-system
