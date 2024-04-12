@@ -77,8 +77,6 @@ spec:
   releaseName: istio-ingressgateway
   targetNamespace: istio-system
   values:
-    service:
-      type: NodePort
     defaults:
       autoscaling:
         enabled: false
