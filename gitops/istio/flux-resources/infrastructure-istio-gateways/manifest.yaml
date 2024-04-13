@@ -4,12 +4,17 @@ metadata:
   name: infrastructure-istio-gateways
   namespace: flux-system
 spec:
-  interval: 1m0s
+  interval: 5m0s
   path: ./gitops/istio/infrastructure/istio-gateways
   prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
   wait: true
+  healthChecks:
+    - apiVersion: install.istio.io/v1alpha1
+      kind: IstioOperator
+      name: eastwest
+      namespace: istio-system
   dependsOn: 
     - name: infrastructure-istio-control-plane

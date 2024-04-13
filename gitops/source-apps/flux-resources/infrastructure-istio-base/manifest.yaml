@@ -4,7 +4,7 @@ metadata:
   name: infrastructure-istio-base
   namespace: flux-system
 spec:
-  interval: 1m0s
+  interval: 5m0s
   path: ./gitops/source-apps/infrastructure/istio-base
   prune: false
   sourceRef:
