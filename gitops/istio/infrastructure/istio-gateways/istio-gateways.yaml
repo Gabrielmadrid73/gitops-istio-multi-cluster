@@ -20,6 +20,7 @@ spec:
             - name: ISTIO_META_REQUESTED_NETWORK_VIEW
               value: network-istio
           service:
+            type: NodePort
             ports:
               - name: status-port
                 port: 15021
