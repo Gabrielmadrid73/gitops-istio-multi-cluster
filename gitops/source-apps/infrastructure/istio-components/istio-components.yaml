@@ -32,6 +32,7 @@ apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
   name: eastwest
+  namespace: istio-system
 spec:
   revision: ""
   profile: empty
