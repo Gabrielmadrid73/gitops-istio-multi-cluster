@@ -1,11 +1,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infrastructure-istio-gateways
+  name: infrastructure-istio-ingress-gateway
   namespace: flux-system
 spec:
   interval: 5m0s
-  path: ./gitops/istio/infrastructure/istio-gateways
+  path: ./gitops/istio/infrastructure/istio-ingress-gateway
   prune: false
   sourceRef:
     kind: GitRepository
@@ -13,7 +13,7 @@ spec:
   healthChecks:
     - apiVersion: v1
       kind: Service
-      name: istio-eastwestgateway
+      name: istio-ingressgateway
       namespace: istio-system
   dependsOn: 
-    - name: infrastructure-istio-control-plane
+    - name: infrastructure-istio-eastwest-gateway
