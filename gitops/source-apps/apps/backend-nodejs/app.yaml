@@ -4,7 +4,7 @@ metadata:
   name: ecsdemo-nodejs
   labels:
     app: ecsdemo-nodejs
-  namespace: istio-system
+  namespace: apps
 spec:
   replicas: 1
   selector:
@@ -33,16 +33,16 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ecsdemo-nodejs
-  namespace: istio-system
+  namespace: apps
   labels:
     service: ecsdemo-nodejs
 spec:
   selector:
     app: ecsdemo-nodejs
   ports:
-   -  protocol: TCP
-      port: 80
-      targetPort: 3000
+   - protocol: TCP
+     port: 80
+     targetPort: 3000
 ---
 # apiVersion: networking.istio.io/v1beta1
 # kind: VirtualService
