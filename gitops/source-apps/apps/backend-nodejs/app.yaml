@@ -43,16 +43,3 @@ spec:
    - protocol: TCP
      port: 80
      targetPort: 3000
----
-# apiVersion: networking.istio.io/v1beta1
-# kind: VirtualService
-# metadata:
-#   name: ecsdemo-nodejs
-#   namespace: apps
-# spec:
-#   hosts:
-#   - ecsdemo-nodejs
-#   http:
-#   - route:
-#     - destination:
-#         host: ecsdemo-nodejs

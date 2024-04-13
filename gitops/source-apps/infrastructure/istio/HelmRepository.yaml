@@ -1,11 +1,22 @@
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: HelmRepository
+# apiVersion: source.toolkit.fluxcd.io/v1beta2
+# kind: HelmRepository
+# metadata:
+#   name: istio
+#   namespace: flux-system
+# spec:
+#   interval: 3m0s
+#   url: https://istio-release.storage.googleapis.com/charts
+
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
 metadata:
   name: istio
   namespace: flux-system
 spec:
-  interval: 3m0s
-  url: https://istio-release.storage.googleapis.com/charts
+  interval: 5m0s
+  url: https://github.com/istio/istio
+  ref:
+    tag: 1.21.0
 
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2

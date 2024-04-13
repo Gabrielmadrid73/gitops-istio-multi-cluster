@@ -1,101 +1,72 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: istio-controlplane
+  namespace: istio-system
+spec:
+  revision: ""
+  profile: empty
+  meshConfig:
+    enablePrometheusMerge: false
+    defaultConfig:
+      proxyMetadata:
+        ISTIO_META_DNS_CAPTURE: "true"
+        ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+  values:
+    gateways:
+      istio-ingressgateway:
+        injectionTemplate: gateway
+    global:
+      network: network-istio
+      meshID: mesh-default
+      multiCluster:
+        clusterName: cluster-istio
+    # sidecarInjectorWebhook:
+    #   rewriteAppHTTPProbe: false
+  components:
+    ingressGateways:
+      - name: istio-eastwestgateway
+        label:
+          istio: eastwestgateway
+          app: istio-eastwestgateway
+          topology.istio.io/network: network-istio
+        enabled: true
+        k8s:
+          env:
+            # traffic through this gateway should be routed inside the network
+            - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+              value: network-istio
+          service:
+            type: NodePort
+            ports:
+              - name: status-port
+                port: 15021
+                targetPort: 15021
+              - name: tls
+                port: 15443
+                targetPort: 15443
+              - name: tls-istiod
+                port: 15012
+                targetPort: 15012
+              - name: tls-webhook
+                port: 15017
+                targetPort: 15017
+
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: istiod-gateway
+  name: cross-network-gateway
   namespace: istio-system
 spec:
   selector:
-    istio: ingressgateway
+    istio: eastwestgateway
   servers:
     - port:
-        name: tls-istiod
-        number: 15012
-        protocol: tls
+        number: 15443
+        name: tls
+        protocol: TLS
       tls:
-        mode: PASSTHROUGH
+        mode: AUTO_PASSTHROUGH
       hosts:
-        - "*"
-    - port:
-        name: tls-istiodwebhook
-        number: 15017
-        protocol: tls
-      tls:
-        mode: PASSTHROUGH
-      hosts:
-        - "*"
-
----
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: istiod-vs
-  namespace: istio-system
-spec:
-  hosts:
-  - "*"
-  gateways:
-  - istiod-gateway
-  tls:
-  - match:
-    - port: 15012
-      sniHosts:
-      - "*"
-    route:
-    - destination:
-        host: istiod.istio-system.svc.cluster.local
-        port:
-          number: 15012
-  - match:
-    - port: 15017
-      sniHosts:
-      - "*"
-    route:
-    - destination:
-        host: istiod.istio-system.svc.cluster.local
-        port:
-          number: 443
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app: nginx
-    service: nginx
-  name: nginx
-  namespace: istio-system
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - image: nginx:latest
-        imagePullPolicy: Always
-        name: nginx
-        ports:
-        - containerPort: 80
-          protocol: TCP
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: nginx
-    service: nginx
-  name: nginx
-  namespace: istio-system
-spec:
-  ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      targetPort: 80
-  selector:
-    app: nginx
-  type: ClusterIP
+        - "*.local"

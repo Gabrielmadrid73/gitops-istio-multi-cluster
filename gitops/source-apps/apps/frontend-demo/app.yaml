@@ -30,9 +30,9 @@ spec:
           protocol: TCP
         env:
         - name: CRYSTAL_URL
-          value: "http://ecsdemo-crystal.istio-system.svc.cluster.local/crystal"
+          value: "http://ecsdemo-crystal.apps.svc.cluster.local/crystal"
         - name: NODEJS_URL
-          value: "http://ecsdemo-nodejs.istio-system.svc.cluster.local/"
+          value: "http://ecsdemo-nodejs.apps.svc.cluster.local/"
 ---
 apiVersion: v1
 kind: Service
@@ -48,16 +48,3 @@ spec:
    - protocol: TCP
      port: 80
      targetPort: 3000
-# ---
-# apiVersion: networking.istio.io/v1beta1
-# kind: VirtualService
-# metadata:
-#   name: ecsdemo-frontend
-#   namespace: apps
-# spec:
-#   hosts:
-#   - ecsdemo-frontend
-#   http:
-#   - route:
-#     - destination:
-#         host: ecsdemo-frontend
