@@ -36,7 +36,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "ecsdemo-frontend.batatinha.com"
+    - "*"
 ---
 
 apiVersion: networking.istio.io/v1alpha3
