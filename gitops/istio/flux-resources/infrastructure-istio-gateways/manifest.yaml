@@ -1,14 +1,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: tools
+  name: infrastructure-istio-gateways
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./gitops/istio/infrastructure/tools
+  path: ./gitops/istio/infrastructure/istio-gateways
   prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
-  dependsOn:
-    - name: infrastructure-istio-components
+  dependsOn: 
+    - name: infrastructure-istio-control-plane

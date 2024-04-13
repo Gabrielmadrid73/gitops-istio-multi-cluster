@@ -1,0 +1,27 @@
+apiVersion: install.istio.io/v1alpha1
+metadata:
+  name: istio-controlplane
+  namespace: istio-system
+kind: IstioOperator
+spec:
+  profile: demo
+  meshConfig:
+    defaultConfig:
+      proxyMetadata:
+        ISTIO_META_DNS_CAPTURE: "true"
+        ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+  components:
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: false
+    egressGateways:
+    - name: istio-egressgateway
+      enabled: false
+  values:
+    # sidecarInjectorWebhook:
+    #   rewriteAppHTTPProbe: false
+    global:
+      meshID: mesh-default
+      multiCluster:
+        clusterName: cluster-source-apps
+      network: network-source-apps

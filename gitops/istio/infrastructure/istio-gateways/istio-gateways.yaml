@@ -1,34 +1,4 @@
 apiVersion: install.istio.io/v1alpha1
-metadata:
-  name: istio-controlplane
-  namespace: istio-system
-kind: IstioOperator
-spec:
-  profile: demo
-  meshConfig:
-    enablePrometheusMerge: false
-    defaultConfig:
-      proxyMetadata:
-        ISTIO_META_DNS_CAPTURE: "true"
-        ISTIO_META_DNS_AUTO_ALLOCATE: "true"
-  components:
-    egressGateways:
-    - name: istio-egressgateway
-      enabled: false
-    ingressGateways:
-    - name: istio-ingressgateway
-      enabled: false
-  values:
-    # sidecarInjectorWebhook:
-    #   rewriteAppHTTPProbe: false
-    global:
-      meshID: mesh-default
-      multiCluster:
-        clusterName: cluster-source-apps
-      network: network-source-apps
-
----
-apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
   name: eastwest
@@ -42,13 +12,13 @@ spec:
         label:
           istio: eastwestgateway
           app: istio-eastwestgateway
-          topology.istio.io/network: network-source-apps
+          topology.istio.io/network: network-istio
         enabled: true
         k8s:
           env:
             # traffic through this gateway should be routed inside the network
             - name: ISTIO_META_REQUESTED_NETWORK_VIEW
-              value: network-source-apps
+              value: network-istio
           service:
             ports:
               - name: status-port
@@ -68,7 +38,7 @@ spec:
       istio-ingressgateway:
         injectionTemplate: gateway
     global:
-      network: network-source-apps
+      network: network-istio
 
 ---
 apiVersion: networking.istio.io/v1alpha3

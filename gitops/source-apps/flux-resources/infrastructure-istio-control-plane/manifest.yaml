@@ -1,14 +1,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infrastructure-istio
+  name: infrastructure-istio-control-plane
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./gitops/istio/infrastructure/istio
+  path: ./gitops/source-apps/infrastructure/istio-control-plane
   prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
-  dependsOn:
-    - name: flux-system
+  dependsOn: 
+    - name: infrastructure-istio-base
