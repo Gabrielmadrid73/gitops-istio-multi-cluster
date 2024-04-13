@@ -63,7 +63,11 @@ for cluster in ${clusters_file[@]};do
     echo "waiting 5 minutes to resources be running..."
     sleep 300
     istioctl create-remote-secret --name=$cluster > secret-$cluster.yaml
-    kubectl patch service istio-eastwestgateway --patch "{\"spec\": {\"externalIPs\": [$ip]}}" -n istio-system
+    body=$(cat <<EOF
+{"spec":{"externalIPs":["$ip"]}}
+EOF
+)
+    kubectl patch service istio-eastwestgateway --patch $body -n istio-system
 done
 
 kconfig source-apps
