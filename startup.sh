@@ -44,7 +44,7 @@ for binary in ${requirements[@]}; do
     fi
 done
 
-clusters_file=(istio source-apps)
+clusters_file=(istio source-apps target-apps)
 
 make -f Makefile.selfsigned.mk root-ca
 
@@ -69,14 +69,18 @@ EOF
     kubectl patch service istio-eastwestgateway --patch $body -n istio-system
 done
 
-kconfig source-apps
-kubectl apply -f secret-istio.yaml
-# kubectl rollout restart deploy ecsdemo-crystal ecsdemo-frontend ecsdemo-nodejs -n apps
-
 kconfig istio
 kubectl apply -f secret-source-apps.yaml
-# kubectl rollout restart deploy nginx -n tools
+kubectl apply -f secret-target-apps.yaml
 
-rm -rf secret-istio.yaml secret-source-apps.yaml
+kconfig source-apps
+kubectl apply -f secret-istio.yaml
+kubectl apply -f secret-target-apps.yaml
+
+kconfig target-apps
+kubectl apply -f secret-istio.yaml
+kubectl apply -f secret-source-apps.yaml
+
+rm -rf secret-istio.yaml secret-source-apps.yaml secret-source-apps.yaml
 
 echo "DONE"
