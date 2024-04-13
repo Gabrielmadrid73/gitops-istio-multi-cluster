@@ -21,5 +21,5 @@ spec:
     global:
       meshID: mesh-default
       multiCluster:
-        clusterName: cluster-source-apps
-      network: network-source-apps
+        clusterName: cluster-target-apps
+      network: network-target-apps

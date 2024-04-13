@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecsdemo-crystal
+  labels:
+    app: ecsdemo-crystal
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecsdemo-crystal
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: ecsdemo-crystal
+        service: ecsdemo-crystal
+    spec:
+      containers:
+      - image: brentley/ecsdemo-crystal:latest
+        imagePullPolicy: Always
+        name: ecsdemo-crystal
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecsdemo-crystal
+  namespace: apps
+  labels:
+    service: ecsdemo-crystal
+spec:
+  selector:
+    app: ecsdemo-crystal
+  ports:
+   - protocol: TCP
+     port: 80
+     targetPort: 3000
+
+
