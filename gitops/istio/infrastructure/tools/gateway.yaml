@@ -1,18 +1,18 @@
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
-  name: tools-ingressgateway
+  name: istio-ingressgateway
   namespace: istio-system
 spec:
   profile: empty
   components:
     ingressGateways:
-      - name: tools-ingressgateway
+      - name: istio-ingressgateway
         namespace: istio-system
         enabled: true
         label:
-          istio: ingressgateway
-          app: tools-ingressgateway
+          istio: istio-ingressgateway
+          app: istio-ingressgateway
         k8s:
           service:
             type: NodePort
@@ -22,37 +22,39 @@ spec:
               injectionTemplate: gateway
 
 ---
-apiVersion: gateway.networking.k8s.io/v1beta1
+apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: tools-gateway
-  namespace: tools
+  name: istio-gateway
+  namespace: istio-system
 spec:
-  gatewayClassName: istio
-  listeners:
-  - name: http
-    hostname: "ecsdemo-frontend.batatinha.com"
-    port: 80
-    protocol: HTTP
-    allowedRoutes:
-      namespaces:
-        from: tools
-
+  selector:
+    istio: istio-ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "ecsdemo-frontend.batatinha.com"
 ---
-apiVersion: gateway.networking.k8s.io/v1beta1
-kind: HTTPRoute
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
 metadata:
-  name: http
-  namespace: tools
+  name: ecsdemo-frontend
+  namespace: istio-system
 spec:
-  parentRefs:
-  - name: tools-gateway
-  hostnames: ["ecsdemo-frontend.batatinha.com"]
-  rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /status
-    backendRefs:
-    - name: ecsdemo-frontend
-      port: 80
+  hosts:
+  - "ecsdemo-frontend.batatinha.com"
+  gateways:
+  - istio-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        port:
+          number: 80
+        host: ecsdemo-frontend.apps
