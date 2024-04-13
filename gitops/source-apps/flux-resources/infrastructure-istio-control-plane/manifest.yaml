@@ -10,7 +10,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: true
   healthChecks:
     - apiVersion: install.istio.io/v1alpha1
       kind: IstioOperator

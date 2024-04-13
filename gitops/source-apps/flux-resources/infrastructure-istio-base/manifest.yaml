@@ -9,5 +9,3 @@ spec:
   prune: false
   sourceRef:
     kind: GitRepository
-    name: flux-system
-  wait: true
