@@ -55,6 +55,7 @@ for cluster in ${clusters_file[@]};do
     ip=$(cat $KUBECONFIG | grep server | awk '{print $2}' | sed 's/:6443//' | sed 's/https:\/\///')
     kubectl create namespace istio-system
     kubectl label namespace istio-system topology.istio.io/network=network-$cluster
+    kubectl label namespace istio-system istio-injection=enabled 
     kubectl create secret generic cacerts -n istio-system --from-file=$cluster/ca-cert.pem --from-file=$cluster/ca-key.pem --from-file=$cluster/root-cert.pem --from-file=$cluster/cert-chain.pem
     flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster/flux-resources --personal
     # Wait for Istio namespace and installation / SA conflict istio-reader-service-account
