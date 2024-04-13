@@ -18,4 +18,5 @@ spec:
   targetNamespace: istio-system
   values:
     server:
-      persistentVolume: false
+      persistentVolume:
+        enabled: false
