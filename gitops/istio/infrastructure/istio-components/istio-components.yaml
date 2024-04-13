@@ -4,8 +4,6 @@ metadata:
   name: istio-controlplane
   namespace: istio-system
 spec:
-  revision: ""
-  profile: empty
   meshConfig:
     enablePrometheusMerge: false
     defaultConfig:
