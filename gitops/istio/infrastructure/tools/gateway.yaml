@@ -43,6 +43,7 @@ apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
   name: http
+  namespace: tools
 spec:
   parentRefs:
   - name: tools-gateway
