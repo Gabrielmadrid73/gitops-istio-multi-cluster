@@ -10,5 +10,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  wait: true
   dependsOn: 
     - name: infrastructure-istio-control-plane
