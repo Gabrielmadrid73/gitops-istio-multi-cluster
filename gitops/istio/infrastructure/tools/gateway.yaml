@@ -16,10 +16,10 @@ spec:
         k8s:
           service:
             type: NodePort
-        values:
-          gateways:
-            istio-ingressgateway:
-              injectionTemplate: gateway
+  values:
+    gateways:
+      istio-ingressgateway:
+        injectionTemplate: gateway
 
 ---
 apiVersion: networking.istio.io/v1alpha3
