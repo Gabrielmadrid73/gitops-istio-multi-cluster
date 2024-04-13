@@ -11,9 +11,9 @@ spec:
     kind: GitRepository
     name: flux-system
   healthChecks:
-    - apiVersion: install.istio.io/v1alpha1
-      kind: IstioOperator
-      name: istio-controlplane
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: istiod
       namespace: istio-system
   dependsOn: 
     - name: infrastructure-istio-base

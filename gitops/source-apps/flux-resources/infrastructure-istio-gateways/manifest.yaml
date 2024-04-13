@@ -11,9 +11,9 @@ spec:
     kind: GitRepository
     name: flux-system
   healthChecks:
-    - apiVersion: install.istio.io/v1alpha1
-      kind: IstioOperator
-      name: eastwest
+    - apiVersion: v1
+      kind: Service
+      name: istio-eastwestgateway
       namespace: istio-system
   dependsOn: 
     - name: infrastructure-istio-control-plane
