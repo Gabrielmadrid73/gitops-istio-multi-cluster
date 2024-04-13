@@ -16,3 +16,6 @@ spec:
       interval: 10m
   releaseName: prometheus
   targetNamespace: istio-system
+  values:
+    server:
+      persistentVolume: false
