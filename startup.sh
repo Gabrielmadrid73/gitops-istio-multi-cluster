@@ -53,6 +53,7 @@ for cluster in ${clusters_file[@]};do
     make -f Makefile.selfsigned.mk $cluster-cacerts
     kconfig $cluster
     ip=$(cat $KUBECONFIG | grep server | awk '{print $2}' | sed 's/:6443//' | sed 's/https:\/\///')
+    echo $ip
     kubectl create namespace istio-system
     kubectl label namespace istio-system topology.istio.io/network=network-$cluster
     kubectl label namespace istio-system istio-injection=enabled 
@@ -62,7 +63,7 @@ for cluster in ${clusters_file[@]};do
     echo "waiting 5 minutes to resources be running..."
     sleep 300
     istioctl create-remote-secret --name=$cluster > secret-$cluster.yaml
-    kubectl patch service istio-eastwestgateway --patch "{\"spec\": {\"externalIPs\": [${ip}]}}" -n istio-system
+    kubectl patch service istio-eastwestgateway --patch "{\"spec\": {\"externalIPs\": [$ip]}}" -n istio-system
 done
 
 kconfig source-apps
