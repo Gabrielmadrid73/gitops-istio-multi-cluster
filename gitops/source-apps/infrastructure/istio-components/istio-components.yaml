@@ -1,26 +1,40 @@
 apiVersion: install.istio.io/v1alpha1
-kind: IstioOperator
 metadata:
   name: istio-controlplane
   namespace: istio-system
+kind: IstioOperator
 spec:
+  profile: demo
   meshConfig:
     enablePrometheusMerge: false
     defaultConfig:
       proxyMetadata:
         ISTIO_META_DNS_CAPTURE: "true"
         ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+  components:
+    egressGateways:
+    - name: istio-egressgateway
+      enabled: false
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: false
   values:
-    gateways:
-      istio-ingressgateway:
-        injectionTemplate: gateway
+    # sidecarInjectorWebhook:
+    #   rewriteAppHTTPProbe: false
     global:
-      network: network-source-apps
       meshID: mesh-default
       multiCluster:
         clusterName: cluster-source-apps
-    # sidecarInjectorWebhook:
-    #   rewriteAppHTTPProbe: false
+      network: network-source-apps
+
+---
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: eastwest
+spec:
+  revision: ""
+  profile: empty
   components:
     ingressGateways:
       - name: istio-eastwestgateway
@@ -35,7 +49,6 @@ spec:
             - name: ISTIO_META_REQUESTED_NETWORK_VIEW
               value: network-source-apps
           service:
-            type: NodePort
             ports:
               - name: status-port
                 port: 15021
@@ -49,6 +62,12 @@ spec:
               - name: tls-webhook
                 port: 15017
                 targetPort: 15017
+  values:
+    gateways:
+      istio-ingressgateway:
+        injectionTemplate: gateway
+    global:
+      network: network-source-apps
 
 ---
 apiVersion: networking.istio.io/v1alpha3

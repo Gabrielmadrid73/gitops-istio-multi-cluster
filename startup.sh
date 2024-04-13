@@ -56,12 +56,11 @@ for cluster in ${clusters_file[@]};do
     echo $ip
     kubectl create namespace istio-system
     kubectl label namespace istio-system topology.istio.io/network=network-$cluster
-    kubectl label namespace istio-system istio-injection=enabled 
     kubectl create secret generic cacerts -n istio-system --from-file=$cluster/ca-cert.pem --from-file=$cluster/ca-key.pem --from-file=$cluster/root-cert.pem --from-file=$cluster/cert-chain.pem
     flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster/flux-resources --personal
-    # Wait for Istio namespace and installation / SA conflict istio-reader-service-account
-    echo "waiting 5 minutes to resources be running..."
-    sleep 300
+    # Wait for Istio namespace and installation
+    echo "waiting 3 minutes to resources be running..."
+    sleep 180
     istioctl create-remote-secret --name=$cluster > secret-$cluster.yaml
     body=$(cat <<EOF
 {"spec":{"externalIPs":["$ip"]}}
