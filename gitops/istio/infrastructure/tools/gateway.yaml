@@ -49,6 +49,7 @@ spec:
   - "ecsdemo-frontend.batatinha.com"
   gateways:
   - istio-gateway
+  - mesh-default
   http:
   - match:
     - uri:
