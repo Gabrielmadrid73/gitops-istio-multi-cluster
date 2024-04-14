@@ -1,3 +1,13 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: kiali
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: https://kiali.org/helm-charts
+
+---
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -8,8 +18,8 @@ spec:
   timeout: 10m
   chart:
     spec:
-      chart: kiali
-      version: '1.42.*'
+      chart: kiali-server
+      version: '1.81.*'
       sourceRef:
         kind: HelmRepository
         name: kiali
@@ -17,6 +27,9 @@ spec:
   releaseName: kiali
   targetNamespace: istio-system
   values:
-    external_services:
-      prometheus:
-        url: "http://prometheus-server.istio-system/"
+    auth:
+      strategy: "anonymous"
+    # external_services:
+    #   prometheus:
+    #     url: "http://prometheus-server.istio-system/"
+# kubectl port-forward svc/kiali 20001:20001 -n istio-system
