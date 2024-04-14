@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: apps-helloworld
-  namespace: apss
+  namespace: apps
   labels:
     app: apps-helloworld
     service: apps-helloworld
@@ -18,7 +18,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: apps-helloworld
-  namespace: apss
+  namespace: apps
   labels:
     app: apps-helloworld
     version: v2
