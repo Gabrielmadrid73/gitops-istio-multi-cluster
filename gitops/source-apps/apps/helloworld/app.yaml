@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: apps-helloworld
+  namespace: apss
+  labels:
+    app: apps-helloworld
+    service: apps-helloworld
+spec:
+  ports:
+  - port: 5000
+    name: http
+  selector:
+    app: apps-helloworld
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apps-helloworld
+  namespace: apss
+  labels:
+    app: apps-helloworld
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apps-helloworld
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: apps-helloworld
+        version: v1
+    spec:
+      containers:
+      - name: apps-helloworld
+        image: docker.io/istio/examples-helloworld-v1
+        resources:
+          requests:
+            cpu: "30m"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000

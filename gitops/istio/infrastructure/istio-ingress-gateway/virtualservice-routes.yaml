@@ -1,11 +1,11 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: ecsdemo-frontend
+  name: apps-helloworld
   namespace: istio-system
 spec:
   hosts:
-  - "ecsdemo-frontend.batatinha.com"
+  - "helloworld.batatinha.com"
   gateways:
   - istio-gateway
   - mesh
@@ -17,4 +17,4 @@ spec:
     - destination:
         port:
           number: 80
-        host: ecsdemo-frontend.apps.svc.cluster.local
+        host: apps-helloworld.apps.svc.cluster.local
