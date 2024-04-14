@@ -8,9 +8,8 @@ metadata:
     service: apps-helloworld
 spec:
   ports:
-  - port: 80
+  - port: 5000
     name: http
-    targetPort: 5000
   selector:
     app: apps-helloworld
 
