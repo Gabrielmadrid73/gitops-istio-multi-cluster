@@ -29,7 +29,7 @@ spec:
   values:
     auth:
       strategy: "anonymous"
-    # external_services:
-    #   prometheus:
-    #     url: "http://prometheus-server.istio-system/"
+    external_services:
+      prometheus:
+        url: "http://prometheus-server.istio-system/"
 # kubectl port-forward svc/kiali 20001:20001 -n istio-system
