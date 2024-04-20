@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rm -rf istio/*.pem source-apps/*.pem root-*
+rm -rf istio source-apps target-apps root-*
 kind delete clusters -A
