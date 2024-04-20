@@ -13,9 +13,6 @@ spec:
         label:
           istio: istio-ingressgateway
           app: istio-ingressgateway
-        k8s:
-          service:
-            type: NodePort
   values:
     gateways:
       istio-ingressgateway:

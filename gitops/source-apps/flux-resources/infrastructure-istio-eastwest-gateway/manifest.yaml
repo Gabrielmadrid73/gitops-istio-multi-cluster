@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 5m0s
   path: ./gitops/source-apps/infrastructure/istio-eastwest-gateway
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

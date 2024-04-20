@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 5m0s
   path: ./gitops/target-apps/infrastructure/istio-control-plane
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -12,9 +12,7 @@ Help()
     echo "./startup.sh -u <string> -t <string>"
     echo
 }
-function kconfig () {
-    export KUBECONFIG=~/.kube/$1
-}
+
 while getopts ":u:t:" option; do
     case $option in
         h)
@@ -36,7 +34,7 @@ done
 export GITHUB_TOKEN=$githubtoken
 
 echo "Checking binaries requirements."
-requirements=("flux" "istioctl")
+requirements=("flux" "istioctl" "kind" "git" "kubectl" "make")
 for binary in ${requirements[@]}; do 
     if ! command -v $binary &> /dev/null; then
         echo "ERROR - $binary not installed."
@@ -48,39 +46,30 @@ clusters_file=(istio source-apps target-apps)
 
 make -f Makefile.selfsigned.mk root-ca
 
-
 for cluster in ${clusters_file[@]};do
+    sed -i '' -e "s/0.0.0.0/$ip/" clusters/$cluster.yaml
+    echo -e "\nCreating cluster $cluster."
+    kind create cluster --config=clusters/$cluster.yaml
+    git restore clusters/$cluster.yaml
     make -f Makefile.selfsigned.mk $cluster-cacerts
-    kconfig $cluster
-    ip=$(cat $KUBECONFIG | grep server | awk '{print $2}' | sed 's/:6443//' | sed 's/https:\/\///')
-    echo $ip
-    kubectl create namespace istio-system
-    kubectl label namespace istio-system topology.istio.io/network=network-$cluster
-    kubectl create secret generic cacerts -n istio-system --from-file=$cluster/ca-cert.pem --from-file=$cluster/ca-key.pem --from-file=$cluster/root-cert.pem --from-file=$cluster/cert-chain.pem
-    flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster/flux-resources --personal
-    # Wait for Istio namespace and installation
-    echo "waiting 3 minutes to resources be running..."
-    sleep 180
-    istioctl create-remote-secret --name=$cluster > secret-$cluster.yaml
-    body=$(cat <<EOF
-{"spec":{"externalIPs":["$ip"]}}
-EOF
-)
-    kubectl patch service istio-eastwestgateway --patch $body -n istio-system
+    kubectl create namespace istio-system --context=kind-$cluster
+    kubectl label namespace istio-system topology.istio.io/network=network-$cluster --context=kind-$cluster
+    kubectl create secret generic cacerts -n istio-system --from-file=$cluster/ca-cert.pem --from-file=$cluster/ca-key.pem --from-file=$cluster/root-cert.pem --from-file=$cluster/cert-chain.pem --context=kind-$cluster
+    flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster/flux-resources --personal --context=kind-$cluster
+    echo "waiting 2 minutes to resources be running..."
+    sleep 120
+    istioctl create-remote-secret --name=$cluster --context=kind-$cluster > secret-$cluster.yaml
 done
 
-kconfig istio
-kubectl apply -f secret-source-apps.yaml
-kubectl apply -f secret-target-apps.yaml
+kubectl apply -f secret-source-apps.yaml --context=kind-istio
+kubectl apply -f secret-target-apps.yaml --context=kind-istio
 
-kconfig source-apps
-kubectl apply -f secret-istio.yaml
-kubectl apply -f secret-target-apps.yaml
+kubectl apply -f secret-istio.yaml --context=kind-source-apps
+kubectl apply -f secret-target-apps.yaml --context=kind-source-apps
 
-kconfig target-apps
-kubectl apply -f secret-istio.yaml
-kubectl apply -f secret-source-apps.yaml
+kubectl apply -f secret-istio.yaml --context=kind-target-apps
+kubectl apply -f secret-source-apps.yaml --context=kind-target-apps
 
-rm -rf secret-istio.yaml secret-source-apps.yaml secret-source-apps.yaml
+rm -rf secret-istio.yaml secret-source-apps.yaml secret-target-apps.yaml
 
 echo "DONE"

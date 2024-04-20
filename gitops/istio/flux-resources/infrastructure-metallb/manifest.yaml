@@ -1,11 +1,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infrastructure-istio-base
+  name: infrastructure-metallb
   namespace: flux-system
 spec:
   interval: 5m0s
-  path: ./gitops/target-apps/infrastructure/istio-base
+  path: ./gitops/istio/infrastructure/metallb
   prune: true
   sourceRef:
     kind: GitRepository
