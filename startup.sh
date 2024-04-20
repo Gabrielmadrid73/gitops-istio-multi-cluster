@@ -34,7 +34,7 @@ done
 export GITHUB_TOKEN=$githubtoken
 
 echo "Checking binaries requirements."
-requirements=("flux" "istioctl" "kind" "git" "kubectl" "make")
+requirements=("flux" "istioctl" "kind" "kubectl" "make")
 for binary in ${requirements[@]}; do 
     if ! command -v $binary &> /dev/null; then
         echo "ERROR - $binary not installed."
@@ -44,13 +44,14 @@ done
 
 clusters_file=(istio source-apps target-apps)
 
+ip=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d\  -f2)
+
 make -f Makefile.selfsigned.mk root-ca
 
 for cluster in ${clusters_file[@]};do
     sed -i '' -e "s/0.0.0.0/$ip/" clusters/$cluster.yaml
     echo -e "\nCreating cluster $cluster."
     kind create cluster --config=clusters/$cluster.yaml
-    git restore clusters/$cluster.yaml
     make -f Makefile.selfsigned.mk $cluster-cacerts
     kubectl create namespace istio-system --context=kind-$cluster
     kubectl label namespace istio-system topology.istio.io/network=network-$cluster --context=kind-$cluster
