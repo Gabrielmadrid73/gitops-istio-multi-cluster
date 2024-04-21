@@ -22,4 +22,4 @@ spec:
       meshID: mesh-default
       multiCluster:
         clusterName: cluster-source-apps
-      network: network-source-apps
+      network: network-default

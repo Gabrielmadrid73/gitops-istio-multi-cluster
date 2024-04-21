@@ -22,4 +22,4 @@ spec:
       meshID: mesh-default
       multiCluster:
         clusterName: cluster-istio
-      network: network-istio
+      network: network-default

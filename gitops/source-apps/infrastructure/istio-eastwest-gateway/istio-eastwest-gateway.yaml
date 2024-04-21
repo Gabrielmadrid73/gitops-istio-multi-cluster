@@ -12,13 +12,13 @@ spec:
         label:
           istio: eastwestgateway
           app: istio-eastwestgateway
-          topology.istio.io/network: network-source-apps
+          topology.istio.io/network: network-default
         enabled: true
         k8s:
           env:
             # traffic through this gateway should be routed inside the network
             - name: ISTIO_META_REQUESTED_NETWORK_VIEW
-              value: network-source-apps
+              value: network-default
           service:
             ports:
               - name: status-port
@@ -38,7 +38,7 @@ spec:
       istio-ingressgateway:
         injectionTemplate: gateway
     global:
-      network: network-source-apps
+      network: network-default
 
 ---
 apiVersion: networking.istio.io/v1alpha3
