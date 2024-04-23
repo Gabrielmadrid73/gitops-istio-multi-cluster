@@ -113,7 +113,7 @@ The communication between them are made by Istio multi cluster multi primary wit
 
 
 8. **Remove cluster source-apps from the istio route**:
-    - Let generating traffic again in another session to follow the changes is live
+    - Let generating traffic again in another session to follow the changes in live
         ```bash
         for x in {0..1500}; do curl -H 'Host: helloworld.batatinha.com' http://127.0.0.1:8080/hello; done
         ```
