@@ -8,7 +8,7 @@ metadata:
 spec:
   interval: 1m0s
   ref:
-    branch: istio-without-eastwest
+    branch: main
   secretRef:
     name: flux-system
   url: https://github.com/gabrielmadrid73/gitops-istio-multi-cluster.git
