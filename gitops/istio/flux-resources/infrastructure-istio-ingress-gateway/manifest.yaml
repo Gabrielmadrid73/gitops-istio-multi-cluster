@@ -16,4 +16,4 @@ spec:
       name: istio-ingressgateway
       namespace: istio-system
   dependsOn: 
-    - name: infrastructure-istio-control-plane
+    - name: infrastructure-istio-eastwest-gateway
