@@ -20,7 +20,7 @@ The communication between them are made by Istio multi cluster multi primary wit
 1. **Setup the environment**:
    - Create a fork for this repository
    - Create or reutilize your Github Personal Access Token(PAT), follow doc: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
-   - Adjust the command of variable 'ip' on script startup.sh to your setup, It should return only IP, like '192.168.15.2'. Note that is already configured to MacOS.
+   - Adjust the command of variable 'ip' on script startup.sh to your setup, It should return only IP, like '192.168.15.2'. Note that is already configured for MacOS.
    - Check if your system have installed the following binaries: kind, kubectl, make, istioctl and flux.
    - Export your github username and PAT through the command bellow:
         ```bash
