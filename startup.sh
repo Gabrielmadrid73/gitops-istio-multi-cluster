@@ -50,7 +50,7 @@ make -f Makefile.selfsigned.mk root-ca
 
 for cluster in ${clusters_file[@]};do
     sed -i '' -e "s/0.0.0.0/$ip/" clusters/$cluster.yaml
-    echo -e "\nCreating cluster $cluster."
+    echo -e "\nCreating cluster $cluster..."
     kind create cluster --config=clusters/$cluster.yaml
     git restore clusters/$cluster.yaml
     make -f Makefile.selfsigned.mk $cluster-cacerts
@@ -59,8 +59,11 @@ for cluster in ${clusters_file[@]};do
     kubectl create secret generic cacerts -n istio-system --from-file=$cluster/ca-cert.pem --from-file=$cluster/ca-key.pem --from-file=$cluster/root-cert.pem --from-file=$cluster/cert-chain.pem --context=kind-$cluster
     flux bootstrap github --token-auth --owner=$githubuser --repository=gitops-istio-multi-cluster --branch=main --path=gitops/$cluster/flux-resources --personal --context=kind-$cluster
     istioctl create-remote-secret --name=$cluster --context=kind-$cluster > secret-$cluster.yaml
+    echo "Waiting 2 minutes to Flux reconcile Its resources..."
+    sleep 120
 done
 
+echo "Creating crossed secrets between the clusters..."
 kubectl apply -f secret-source-apps.yaml --context=kind-istio
 kubectl apply -f secret-target-apps.yaml --context=kind-istio
 
