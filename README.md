@@ -1,6 +1,6 @@
 ## Summary
 
-That project provision 3 kind clusters, istio, source-apps and target-apps. The cluster istio will be responsible for handle the traffic and Istio ingress gateway resources and the other clusters will be running the application helloworld, beeing cluster source-apps with version V1 and target-apps with V2.
+This project provision 3 kind clusters, istio, source-apps and target-apps. The cluster istio will be responsible for handle the traffic and Istio ingress gateway resources and the other clusters will be running the application helloworld, beeing cluster source-apps with version V1 and target-apps with V2.
 
 The communication between them are made by Istio multi cluster multi primary with different network, and except by the actions on startup.sh, the whole resources are created by Flux.
 
