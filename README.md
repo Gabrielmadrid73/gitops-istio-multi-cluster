@@ -4,6 +4,9 @@ This project provision 3 kind clusters, istio, source-apps and target-apps. The 
 
 The communication between them are made by Istio multi cluster multi primary with different network, and except by the actions on startup.sh, the whole resources are created by Flux.
 
+## Network Architecture draw
+![Architecture](./images/architecture.png)
+
 ## Requirements
 
 **Binaries installed**
