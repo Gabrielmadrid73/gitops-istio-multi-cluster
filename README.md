@@ -111,8 +111,14 @@ The communication between them are made by Istio multi cluster multi primary wit
     - Until the flux reconcile the replicas, the output of that test will return only V2 version, which is running on cluster target-apps
         ![Curl output 2](./images/curl-output-2.png)
 
+8. **Test east west connection between clusters source-apps and target-apps**:
+    - Make a request from helloworld V1 on cluster source-apps to app2 on target-apps
+        ```bash
+        kubectl exec -it "$(kubectl get pod --context=kind-source-apps -n apps -l app=apps-helloworld -o jsonpath='{.items[0].metadata.name}')" -n apps --context=kind-source-apps -- curl http://app2.apps2/
+        ```
+    - It should return the nginx default web page
 
-8. **Remove cluster source-apps from the istio route**:
+9. **Remove cluster source-apps from the istio route**:
     - Let generating traffic again in another session to follow the changes in live
         ```bash
         for x in {0..1500}; do curl -H 'Host: helloworld.batatinha.com' http://127.0.0.1:8080/hello; done
@@ -142,7 +148,7 @@ The communication between them are made by Istio multi cluster multi primary wit
     - And then, cluster source-apps receive the traffic again
     ![Kiali graph 3](./images/kiali-3.png)
 
-9. **Cleanup**:
+10. **Cleanup**:
     - Execute the clean up script
         ```bash
         ./cleanup.sh

@@ -44,16 +44,17 @@ done
 
 clusters_file=(istio source-apps target-apps)
 
+# Command to MacOS - Adjust to your SO
 ip=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d\  -f2)
 
-make -f Makefile.selfsigned.mk root-ca
+make -f certs/Makefile.selfsigned.mk root-ca
 
 for cluster in ${clusters_file[@]};do
     sed -i '' -e "s/0.0.0.0/$ip/" clusters/$cluster.yaml
     echo -e "\nCreating cluster $cluster..."
     kind create cluster --config=clusters/$cluster.yaml
     git restore clusters/$cluster.yaml
-    make -f Makefile.selfsigned.mk $cluster-cacerts
+    make -f certs/Makefile.selfsigned.mk $cluster-cacerts
     kubectl create namespace istio-system --context=kind-$cluster
     kubectl label namespace istio-system topology.istio.io/network=network-$cluster --context=kind-$cluster
     kubectl create secret generic cacerts -n istio-system --from-file=$cluster/ca-cert.pem --from-file=$cluster/ca-key.pem --from-file=$cluster/root-cert.pem --from-file=$cluster/cert-chain.pem --context=kind-$cluster
