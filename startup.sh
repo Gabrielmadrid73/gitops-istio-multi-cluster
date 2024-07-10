@@ -45,7 +45,7 @@ done
 clusters_file=(istio source-apps target-apps)
 
 # Command to MacOS - Adjust to your SO
-ip=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d\  -f2)
+ip=$(ifconfig | grep "broadcast" | cut -d\  -f2)
 
 make -f certs/Makefile.selfsigned.mk root-ca
 
