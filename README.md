@@ -10,6 +10,7 @@ The communication between them are made by Istio multi cluster multi primary wit
 ## Requirements
 
 **Binaries installed**
+- docker
 - flux
 - istioctl
 - kind

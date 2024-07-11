@@ -34,7 +34,7 @@ done
 export GITHUB_TOKEN=$githubtoken
 
 echo "Checking binaries requirements."
-requirements=("flux" "istioctl" "kind" "kubectl" "make")
+requirements=("flux" "istioctl" "kind" "kubectl" "make" "docker")
 for binary in ${requirements[@]}; do 
     if ! command -v $binary &> /dev/null; then
         echo "ERROR - $binary not installed."
